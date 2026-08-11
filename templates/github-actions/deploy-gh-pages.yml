@@ -1,11 +1,14 @@
-name: Deploy App to GitHub Pages
+name: Deploy Offline Knowledge Center & Cloud Scraper to GitHub Pages
 
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0' # Automated weekly background scrape
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -27,11 +30,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
-      - name: Build Application
+      - name: Run Cloud Scraping Pipeline
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
+          chmod +x run_pipeline.sh
+          ./run_pipeline.sh
+
+      - name: Commit Scraped Data Back to Main
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(cloud-scraper): Automated cloud scraping update"
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd offline-knowledge-center
           npm ci
+
+      - name: Build Vite PWA App
+        run: |
+          cd offline-knowledge-center
           npm run build
 
       - name: Setup Pages
@@ -40,7 +59,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist'
+          path: 'offline-knowledge-center/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
