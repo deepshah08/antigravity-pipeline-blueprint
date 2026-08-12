@@ -27,7 +27,8 @@ $$\text{Jules (100 daily sessions)} \longrightarrow \text{Gemini Flash (Medium/L
 
 | Version | Release Date | Key Enhancements |
 | :--- | :--- | :--- |
-| **v2.0.0** | 2026-08-10 | **Current Master:** Integrated 5-min subagent latency rule, GitHub Actions `gemini-3.6-flash` PR reviews, and GitHub Pages deployment. |
+| **v2.2.0** | 2026-08-11 | **Current Master:** Added `jules-auto-reviewer` & `keenable-cli` reusable skills, automated cloud scraper workflows (`workflow_dispatch`, `schedule` cron), and link sanitization. |
+| **v2.0.0** | 2026-08-10 | Integrated 5-min subagent latency rule, GitHub Actions `gemini-3.6-flash` PR reviews, and GitHub Pages deployment. |
 | **v1.2.0** | 2026-08-09 | Added 5-minute polling latency rule for Flash Session Managers to save 80%+ context tokens. |
 | **v1.1.0** | 2026-08-09 | Introduced asynchronous Flash Session Manager subagent handshakes for PR review/merges. |
 | **v1.0.0** | 2026-08-09 | Initial release: Primary Orchestrator + Jules cloud execution. |
@@ -43,11 +44,14 @@ antigravity-pipeline-blueprint/
 ├── architecture/
 │   ├── v1.0.0-initial.md             # Initial single-agent baseline
 │   └── v2.0.0-master.md              # Current state-of-the-art architecture
+├── skills/
+│   ├── jules-auto-reviewer/           # Automated Jules PR reviewer & orchestrator skill
+│   └── keenable-cli/                  # Keenable web search & page fetching CLI skill
 └── templates/
     ├── task-tracker.md                # Reusable Bucketed Execution Tracker
     ├── session-manager-prompt.md      # Asynchronous Flash Session Manager prompt
     └── github-actions/
-        ├── deploy-gh-pages.yml       # GitHub Pages PWA deployment workflow
+        ├── deploy-gh-pages.yml       # GitHub Pages PWA & Cloud Scraper deployment workflow
         └── gemini-code-review.yml    # Gemini 3.6 Flash PR review workflow
 ```
 
